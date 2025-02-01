@@ -1,0 +1,42 @@
+<!-- Username page -->
+<div *ngIf="!isChatStarted" id="username-page">
+  <div class="username-page-container">
+    <h1 class="title">Enter your username to join the chat</h1>
+    <form (ngSubmit)="initChat()">
+      <div class="form-group">
+        <input [(ngModel)]="username" name="username" type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="accent username-submit">Start Chatting</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Chat page appears only when isChatStarted is true -->
+<div *ngIf="isChatStarted" id="chat-page">
+  <div class="chat-container">
+    <h2>Welcome, {{ username }}! 👋</h2>
+    <div class="recipient-section">
+      <input [(ngModel)]="recipient" name="recipient" type="text" placeholder="Enter recipient username" class="form-control" required />
+    </div>
+
+    <!-- Message display area -->
+    <div class="message-area">
+      <div *ngFor="let msg of messages" class="message" [ngClass]="{'sender-message': msg.sender === username, 'receiver-message': msg.sender !== username}">
+        <div class="message-content">
+          <div class="avatar" [style.backgroundColor]="getAvatarColor(msg.sender)">{{ msg.sender.charAt(0).toUpperCase() }}</div>
+          <span [style.color]="getAvatarColor(msg.sender)"><b>{{ msg.sender }}</b>:</span> {{ msg.content }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Input field to type messages -->
+    <div id="typingArea">
+      <div class="input-group">
+        <input [(ngModel)]="messageContent" name="messageContent" type="text" placeholder="Type a message..." class="form-control" (keyup.enter)="sendMessage()" />
+        <button (click)="sendMessage()" class="primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
